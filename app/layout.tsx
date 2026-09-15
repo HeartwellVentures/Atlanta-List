@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     template: '%s | The Atlanta List',
   },
   description:
-    'A curated directory of Atlanta\'s top-rated plumbers, electricians, HVAC techs, roofers, and cleaners. Pros pay a flat membership, never per lead.',
+    'A curated directory of Atlanta\'s top-rated plumbers, electricians, HVAC techs, roofers, and cleaners. Real businesses, verified ratings, and rankings nobody can buy.',
 };
 
 export default function RootLayout({

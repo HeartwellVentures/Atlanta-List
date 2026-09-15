@@ -177,7 +177,7 @@ export default async function ProPage({ params }: Props) {
       <section className="mt-10 rounded-2xl border border-border bg-card p-6 sm:p-8">
         <h2 className="font-serif text-2xl font-semibold">Request a quote</h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          Your request goes straight to the pro. The Atlanta List never charges per lead.
+          Your request goes straight to the pro. No middleman, no call center.
         </p>
         <div className="mt-5">
           <QuoteForm proId={pro.id} proName={pro.name} />

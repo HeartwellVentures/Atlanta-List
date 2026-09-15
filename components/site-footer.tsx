@@ -15,7 +15,7 @@ export function SiteFooter() {
             <span className="font-serif text-lg font-semibold">The Atlanta List</span>
           </div>
           <p className="mt-3 text-sm text-muted-foreground">
-            Curated pros on flat membership. No per-lead fees, no pay-to-play ranking.
+            Curated Atlanta pros, ranked by rating. No pay-to-play ranking.
           </p>
         </div>
         <div>
@@ -65,7 +65,7 @@ export function SiteFooter() {
       </div>
       <div className="border-t border-border">
         <p className="mx-auto max-w-6xl px-4 py-4 text-xs text-muted-foreground sm:px-6">
-          The Atlanta List is an independent directory. Listings are curated and paid via flat membership.
+          The Atlanta List is an independent directory. Rankings are based on ratings, never sold.
         </p>
       </div>
     </footer>

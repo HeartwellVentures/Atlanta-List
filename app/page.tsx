@@ -17,8 +17,8 @@ export const revalidate = 60;
 const howItWorks = [
   { title: 'Browse by trade or neighborhood', body: 'Pick a category or see who serves your Atlanta neighborhood.' },
   { title: 'Shortlist pros', body: 'Compare ratings and review counts side by side.' },
-  { title: 'Contact directly', body: 'Request a quote from the pro, no marketplace layer in between.' },
-  { title: 'No per-lead fees', body: 'Membership is flat, so pros list everything they are good at.' },
+  { title: 'Contact directly', body: 'Request a quote from the pro. No middleman, no call center.' },
+  { title: 'Hire with confidence', body: 'Every pro is rated by real Atlanta homeowners, not by who paid the most.' },
 ];
 
 const heroImage =
@@ -204,8 +204,8 @@ export default async function HomePage() {
                   Are you a home service pro in Atlanta?
                 </h2>
                 <p className="mt-3 max-w-xl text-primary-foreground/80">
-                  Claim your listing with a flat membership. Angi and Thumbtack tax every lead;
-                  The Atlanta List rents you visibility without the lead tax.
+                  Get found by Atlanta homeowners searching for your trade. Claim your listing
+                  and join a curated directory built on ratings, not lead fees.
                 </p>
               </div>
               <div className="md:text-right">

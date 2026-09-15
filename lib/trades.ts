@@ -18,7 +18,7 @@ export const trades: Trade[] = [
     plural: 'Plumbers',
     icon: Droplets,
     intro:
-      'Atlanta\'s older homes, from Craftsman bungalows in Grant Park to brick ranches in Brookhaven, keep plumbers busy with aging supply lines, clogged drains, and water heaters nearing the end of their life. The plumbers on this list understand Atlanta\'s mix of older cast-iron waste lines and newer PEX retrofits, and they quote flat membership, not a per-lead tax.',
+      'Atlanta\'s older homes, from Craftsman bungalows in Grant Park to brick ranches in Brookhaven, keep plumbers busy with aging supply lines, clogged drains, and water heaters nearing the end of their life. The plumbers on this list understand Atlanta\'s mix of older cast-iron waste lines and newer PEX retrofits.',
     faq: [
       {
         q: 'How much does a plumber cost in Atlanta?',
@@ -46,7 +46,7 @@ export const trades: Trade[] = [
     plural: 'Electricians',
     icon: Plug,
     intro:
-      'Atlanta\'s housing stock spans pre-war knob-and-tube wiring and newer smart panels, and the city\'s renovation surge keeps licensed electricians in constant demand. The electricians here range from panel upgrades and circuit troubleshooting to EV charger installs and whole-home rewires, charging clear project pricing without paying a lead fee to a marketplace.',
+      'Atlanta\'s housing stock spans pre-war knob-and-tube wiring and newer smart panels, and the city\'s renovation surge keeps licensed electricians in constant demand. The electricians here range from panel upgrades and circuit troubleshooting to EV charger installs and whole-home rewires.',
     faq: [
       {
         q: 'How much does an electrician cost in Atlanta?',
@@ -62,7 +62,7 @@ export const trades: Trade[] = [
       },
       {
         q: 'How do I pick an electrician from the list?',
-        a: 'Match the scope of your job to their listed specialties, compare ratings and review volume, then call. Membership ranking on The Atlanta List never sells placement per lead.',
+        a: 'Match the scope of your job to their listed specialties, compare ratings and review volume, then call. Rankings on The Atlanta List are based on ratings, never sold to the highest bidder.',
       },
     ],
     skills: ['Panel upgrade', 'Outlet repair', 'Lighting',
@@ -102,7 +102,7 @@ export const trades: Trade[] = [
     plural: 'Roofers',
     icon: Home,
     intro:
-      'Between summer storms, pine pollen accumulation, and the freeze-thaw swings of North Georgia, Atlanta roofs take a beating. Pros here handle leak repairs, full asphalt shingle replacements, and metal roofing on everything from intown bungalows to suburban two-stories, quoting projects without paying a marketplace per lead.',
+      'Between summer storms, pine pollen accumulation, and the freeze-thaw swings of North Georgia, Atlanta roofs take a beating. Pros here handle leak repairs, full asphalt shingle replacements, and metal roofing on everything from intown bungalows to suburban two-stories.',
     faq: [
       {
         q: 'How much does a new roof cost in Atlanta?',
