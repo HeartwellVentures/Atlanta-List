@@ -52,7 +52,7 @@ export function SiteFooter() {
           </h4>
           <ul className="mt-3 space-y-2 text-sm">
             <li>
-              <Link href="/quiz" className="hover:text-accent">Match Quiz</Link>
+              <Link href="/quiz" className="hover:text-accent">Find Your Pro</Link>
             </li>
             <li>
               <Link href="/for-pros" className="hover:text-accent">For Pros</Link>

@@ -22,7 +22,7 @@ export function SiteHeader() {
             Neighborhoods
           </Link>
           <Link href="/quiz" className="text-sm font-medium text-muted-foreground hover:text-foreground">
-            Match Quiz
+            Find Your Pro
           </Link>
           <Link href="/for-pros" className="text-sm font-medium text-muted-foreground hover:text-foreground">
             For Pros

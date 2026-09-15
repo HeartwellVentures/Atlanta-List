@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Wrench, MapPin, Clock, ArrowRight, Star } from 'lucide-react';
+import { MapPin, Clock, ArrowRight, Star } from 'lucide-react';
 import { trades } from '@/lib/trades';
 import { neighborhoods } from '@/lib/neighborhoods';
 import { supabase, Pro } from '@/lib/supabase';
@@ -10,7 +10,7 @@ import { TradeIcon } from '@/components/trade-icon';
 
 const whenOptions = ['Today', 'This week', 'Flexible'];
 
-export default function QuizPage() {
+export default function FindYourProPage() {
   const [step, setStep] = useState(1);
   const [trade, setTrade] = useState('');
   const [neighborhood, setNeighborhood] = useState('');
@@ -26,18 +26,10 @@ export default function QuizPage() {
       .eq('trade_slug', trade);
 
     let matches = (data ?? []) as Pro[];
-    // Rule 1: neighborhood match first
     let inArea = matches.filter((p) => (p.neighborhoods ?? []).includes(neighborhood));
     let final = inArea.length >= 3 ? inArea : matches;
-    // Rule 2: tier trumps raw sort, rating breaks ties
-    const rank: Record<string, number> = { premium: 0, featured: 1, free: 2 };
     final = final
-      .sort((a, b) => {
-        const ra = rank[a.tier];
-        const rb = rank[b.tier];
-        if (ra !== rb) return ra - rb;
-        return (b.rating ?? 0) - (a.rating ?? 0);
-      })
+      .sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0))
       .slice(0, 3);
     setResults(final);
     setDone(true);
@@ -45,9 +37,9 @@ export default function QuizPage() {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
-      <h1 className="font-serif text-3xl font-bold">Match quiz</h1>
+      <h1 className="font-serif text-3xl font-bold">Find your pro</h1>
       <p className="mt-2 text-muted-foreground">
-        Three questions, three recommendations. No AI, just direct matching on trade, area, and timing.
+        Answer 3 quick questions, get 3 top-rated pros.
       </p>
 
       {!done && (
@@ -136,10 +128,15 @@ export default function QuizPage() {
                   <div>
                     <p className="font-semibold group-hover:text-accent">{p.name}</p>
                     <p className="text-xs text-muted-foreground">{p.trade_name}</p>
-                    <p className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
-                      <Star className="h-3.5 w-3.5 fill-current text-accent" />
-                      {p.rating?.toFixed(1) ?? 'N/A'} ({p.review_count?.toLocaleString() ?? 'reviews'})
-                    </p>
+                    <div className="mt-1.5 flex items-baseline gap-2">
+                      <span className="flex items-center gap-1 text-sm font-bold text-foreground">
+                        <Star className="h-4 w-4 fill-current text-accent" />
+                        {p.rating?.toFixed(1) ?? 'N/A'}
+                      </span>
+                      <span className="text-sm font-semibold text-muted-foreground">
+                        {p.review_count != null ? `${p.review_count.toLocaleString()} reviews` : 'See reviews'}
+                      </span>
+                    </div>
                     <p className="mt-1 text-xs text-muted-foreground">
                       Serves: {(p.neighborhoods ?? []).slice(0, 3).join(', ')}
                     </p>
@@ -155,7 +152,7 @@ export default function QuizPage() {
             }}
             className="mt-6 rounded-lg border border-border px-4 py-2 text-sm font-semibold hover:bg-secondary"
           >
-            Run the quiz again
+            Start over
           </button>
         </div>
       )}

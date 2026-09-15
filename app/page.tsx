@@ -62,7 +62,7 @@ export default async function HomePage() {
               href="/quiz"
               className="rounded-lg bg-accent px-7 py-3.5 text-sm font-semibold text-accent-foreground shadow-lg transition hover:-translate-y-0.5 hover:shadow-xl"
             >
-              Take the Match Quiz
+              Find your pro
             </Link>
             <Link
               href="/trades"

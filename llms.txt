@@ -1,0 +1,78 @@
+# The Atlanta List
+
+> A curated directory of top-rated Atlanta home service pros. Plumbers, electricians, HVAC techs, roofers, and house cleaners. Rankings based on ratings, never sold.
+
+## What this is
+
+The Atlanta List is a homeowner-facing directory of vetted home service businesses in Atlanta, GA. Pros pay a flat membership to list; homeowners browse free. Rankings are by rating and review count, not by who paid the most.
+
+## Directory structure
+
+- `app/page.tsx` - Homepage with hero, trade grid, featured pros, neighborhoods, how-it-works
+- `app/[slug]/page.tsx` - Trade listing pages (e.g. /plumbers, /electricians, /hvac, /roofers, /cleaners)
+- `app/pro/[slug]/page.tsx` - Individual business profile pages with LocalBusiness JSON-LD
+- `app/quiz/page.tsx` - "Find your pro" 3-step concierge flow (trade, neighborhood, timing)
+- `app/areas/page.tsx` - Neighborhood index
+- `app/areas/[slug]/page.tsx` - Neighborhood-specific listing pages
+- `app/for-pros/page.tsx` - Pro-facing page with membership tiers and claim flow
+- `app/admin/page.tsx` - Admin panel (password-gated via edge function)
+- `components/pro-card.tsx` - Business card component used across listing pages
+- `components/quote-form.tsx` - Quote request form on profile pages
+- `components/schema.tsx` - JSON-LD serializer and renderer
+- `components/breadcrumbs.tsx` - Breadcrumb navigation with BreadcrumbList JSON-LD
+- `lib/supabase.ts` - Supabase client, Pro interface, getApprovedPros, getProBySlug
+- `lib/trades.ts` - Trade definitions (slug, name, intro, FAQ, skills)
+- `lib/neighborhoods.ts` - Atlanta neighborhood definitions (slug, name, intro)
+- `supabase/functions/admin-pros/index.ts` - Admin edge function (list/update pros)
+- `supabase/functions/checkout/index.ts` - Checkout edge function for memberships
+
+## Trades
+
+| Slug       | Name           | What they do                                      |
+|------------|----------------|---------------------------------------------------|
+| plumbers   | Plumbers       | Repairs, drains, water heaters, emergency leaks   |
+| electricians | Electricians | Panels, wiring, EV chargers, lighting, generators  |
+| hvac       | HVAC           | AC repair, furnace, tune-ups, system replacement   |
+| roofers    | Roofers        | Leak repair, full replacement, storm damage        |
+| cleaners   | House Cleaners | Recurring, deep clean, move-out, green products   |
+
+## Neighborhoods
+
+Buckhead, Midtown, Decatur, Virginia-Highland, East Atlanta, Westside, Sandy Springs, Brookhaven.
+
+## Listing data structure
+
+Each business (pro) has:
+- `slug` - URL-safe identifier, used in `/pro/[slug]` URLs
+- `name` - Business name
+- `trade_slug` / `trade_name` - Which trade category they belong to
+- `phone` - Contact phone
+- `website` - External website URL (validated server-side)
+- `address`, `city`, `state`, `zip` - Physical location
+- `neighborhoods` - Array of Atlanta neighborhood names they serve
+- `services` - Array of specialty tags
+- `hours` - Business hours string
+- `rating` - Numeric rating (e.g. 4.9)
+- `review_count` - Integer review count
+- `review_url` - External reviews page URL (validated server-side)
+- `tier` - Membership tier: "free", "featured", or "premium"
+- `approved` - Boolean, must be true to appear publicly
+
+## URLs
+
+- Homepage: `/`
+- Trade pages: `/{trade-slug}` (e.g. `/plumbers`)
+- Business profile: `/pro/{pro-slug}`
+- Neighborhood pages: `/areas/{neighborhood-slug}`
+- Find your pro: `/quiz`
+- For pros: `/for-pros`
+- Admin: `/admin` (not indexed)
+
+## Technical notes
+
+- Next.js 13.5.1 App Router with static generation
+- Supabase for data with row-level security
+- Business profile pages include LocalBusiness JSON-LD with name, address, phone, aggregateRating, and areaServed
+- Trade pages include FAQPage JSON-LD
+- All pages use semantic HTML (h1, h2, h3, ul, li) with no critical content behind client-only rendering
+- Business profile pages are server-rendered with stable, human-readable URLs
