@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
+import { serializeJsonLd } from '@/components/schema';
 
 export interface Crumb {
   label: string;
@@ -21,7 +22,7 @@ export function Breadcrumbs({ items }: { items: Crumb[] }) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
+          __html: serializeJsonLd({
             '@context': 'https://schema.org',
             '@type': 'BreadcrumbList',
             itemListElement: schemaItems,

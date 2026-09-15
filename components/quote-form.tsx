@@ -16,12 +16,17 @@ export default function QuoteForm({ proId, proName }: { proId: string; proName: 
     setError('');
     setLoading(true);
     const form = new FormData(e.currentTarget);
-    const name = String(form.get('name') || '');
-    const email = String(form.get('email') || '');
-    const phone = String(form.get('phone') || '');
-    const message = String(form.get('message') || '');
+    const name = String(form.get('name') || '').trim();
+    const email = String(form.get('email') || '').trim();
+    const phone = String(form.get('phone') || '').trim();
+    const message = String(form.get('message') || '').trim();
     if (!name || !email || !message) {
       setError('Please fill in your name, email, and a short description of the job.');
+      setLoading(false);
+      return;
+    }
+    if (name.length > 120 || email.length > 200 || phone.length > 40 || message.length > 5000) {
+      setError('Please shorten your details. The job description can be up to 5000 characters.');
       setLoading(false);
       return;
     }
@@ -29,7 +34,7 @@ export default function QuoteForm({ proId, proName }: { proId: string; proName: 
       pro_id: proId,
       name,
       email,
-      phone,
+      phone: phone || null,
       message,
     });
     setLoading(false);
@@ -53,10 +58,15 @@ export default function QuoteForm({ proId, proName }: { proId: string; proName: 
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <Input name="name" placeholder="Your name" required />
-      <Input name="email" type="email" placeholder="Email" required />
-      <Input name="phone" type="tel" placeholder="Phone (optional)" />
-      <Textarea name="message" placeholder="Describe the job (e.g. leaks under kitchen sink)" required />
+      <Input name="name" placeholder="Your name" maxLength={120} required />
+      <Input name="email" type="email" placeholder="Email" maxLength={200} required />
+      <Input name="phone" type="tel" placeholder="Phone (optional)" maxLength={40} />
+      <Textarea
+        name="message"
+        placeholder="Describe the job (e.g. leaks under kitchen sink)"
+        maxLength={5000}
+        required
+      />
       {error && <p className="text-sm text-destructive">{error}</p>}
       <Button type="submit" disabled={loading} className="bg-accent text-accent-foreground hover:opacity-90">
         {loading ? 'Sending...' : `Request quote from ${proName}`}

@@ -39,10 +39,17 @@ export default function ForProsPage() {
   const [searchDone, setSearchDone] = useState(false);
 
   async function claimSearch() {
+    // Strip characters that carry meaning in a PostgREST filter expression.
+    const term = query.replace(/[%_,()*\\"']/g, ' ').trim().slice(0, 60);
+    if (!term) {
+      setResults([]);
+      setSearchDone(true);
+      return;
+    }
     const { data } = await supabase
       .from('pros')
       .select('id, slug, name, trade_name, tier')
-      .ilike('name', `%${query}%`)
+      .ilike('name', `%${term}%`)
       .eq('approved', true)
       .limit(5);
     setResults(data ?? []);
@@ -51,10 +58,10 @@ export default function ForProsPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-      <h1 className="font-serif text-4xl font-bold">For Atlanta home pros, a flat-rent directory</h1>
+      <h1 className="font-serif text-4xl font-bold">Get found in Atlanta without paying per lead.</h1>
       <p className="mt-4 max-w-3xl text-muted-foreground">
         Angi and Thumbtack sell you visibility one lead at a time, and they charge every lead.
-        The Atlanta List charges flat membership. Keep more of what you earn.
+        The Atlanta List charges a flat membership. Keep more of what you earn.
       </p>
 
       <section className="mt-12 rounded-2xl border border-border bg-card p-6 sm:p-8">
@@ -107,8 +114,9 @@ export default function ForProsPage() {
 
       <section id="claim" className="mt-12 rounded-2xl bg-secondary p-6 sm:p-8">
         <h2 className="font-serif text-2xl font-semibold">Claim your listing</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Search your business on The Atlanta List. Claim a Free, Featured, or Premium membership.
+        <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+          Get found in Atlanta without paying per lead. Search your business on The Atlanta List,
+          then claim a Free, Featured, or Premium membership.
         </p>
         <div className="mt-4 flex gap-2">
           <Input

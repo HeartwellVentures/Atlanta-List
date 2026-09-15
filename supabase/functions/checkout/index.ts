@@ -38,8 +38,9 @@ Deno.serve(async (req: Request) => {
       { status: 501, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   } catch (err) {
+    console.error('checkout failure', err);
     return new Response(
-      JSON.stringify({ error: (err as Error).message }),
+      JSON.stringify({ error: 'Something went wrong.' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }

@@ -7,9 +7,9 @@ import { ProCard } from '@/components/pro-card';
 import { TradeIcon } from '@/components/trade-icon';
 
 export const metadata = {
-  title: 'The Atlanta List: vetted home service pros without per-lead fees',
+  title: 'The Atlanta List: Atlanta home pros you don\'t have to second-guess',
   description:
-    'Browse Atlanta\'s top-rated plumbers, electricians, HVAC techs, roofers, and cleaners. Pros pay flat membership, never per lead.',
+    'A curated directory of top-rated Atlanta plumbers, electricians, HVAC techs, roofers, and house cleaners. Real businesses, verified ratings, and rankings nobody can buy.',
 };
 
 export const revalidate = 60;
@@ -22,13 +22,14 @@ const howItWorks = [
 ];
 
 const heroImage =
-  'https://images.pexels.com/photos/2815169/pexels-photo-2815169.jpeg?auto=compress&cs=tinysrgb&w=1920';
+  'https://images.pexels.com/photos/2815169/pexels-photo-2815169.jpeg?auto=compress&cs=tinysrgb&h=650&w=940';
 
 export default async function HomePage() {
   const perTrade = await Promise.all(
     trades.map(async (t) => {
-      const list = await getApprovedPros({ trade: t.slug, limit: 1 });
-      return list[0];
+      const list = await getApprovedPros({ trade: t.slug });
+      // Highest rated pro per trade, so the ordering matches what we promise homeowners.
+      return [...list].sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0))[0];
     })
   );
   const featured = perTrade.filter(Boolean) as Pro[];
@@ -42,19 +43,19 @@ export default async function HomePage() {
           alt="Atlanta skyline at golden hour"
           className="absolute inset-0 h-full w-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/50 to-primary/20" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-primary/60 to-primary/30" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/25 to-transparent" />
 
         <div className="relative mx-auto w-full max-w-6xl px-4 pb-16 pt-32 sm:px-6 sm:pb-24">
-          <p className="inline-block rounded-full border border-white/30 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-white/90 backdrop-blur-sm">
+          <p className="inline-block rounded-full border border-cream/40 bg-black/25 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-cream backdrop-blur-sm">
             The Atlanta List
           </p>
-          <h1 className="mt-6 max-w-3xl font-serif text-5xl font-bold leading-[1.02] tracking-tight text-white sm:text-7xl">
-            Get found in Atlanta without paying per lead.
+          <h1 className="mt-6 max-w-3xl font-serif text-5xl font-bold leading-[1.02] tracking-tight text-cream drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)] sm:text-7xl">
+            Atlanta home pros you don&apos;t have to second-guess.
           </h1>
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/85">
+          <p className="mt-6 max-w-xl text-lg leading-relaxed text-cream drop-shadow-[0_1px_8px_rgba(0,0,0,0.6)]">
             A curated directory of top-rated plumbers, electricians, HVAC techs, roofers,
-            and house cleaners. Pros pay a flat membership, homeowners browse free.
+            and house cleaners. Real businesses, verified ratings, and rankings nobody can buy.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
@@ -65,7 +66,7 @@ export default async function HomePage() {
             </Link>
             <Link
               href="/trades"
-              className="rounded-lg border border-white/40 bg-white/10 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/20"
+              className="rounded-lg border border-cream/50 bg-black/30 px-7 py-3.5 text-sm font-semibold text-cream backdrop-blur-sm transition hover:bg-black/45"
             >
               Browse trades
             </Link>
@@ -78,12 +79,12 @@ export default async function HomePage() {
         <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
           <div className="grid gap-6 sm:grid-cols-3">
             <div className="flex items-start gap-3">
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-bold text-accent-foreground">
-                $0
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent text-accent-foreground">
+                <Check className="h-4 w-4" />
               </span>
               <div>
-                <p className="font-medium">No per-lead fees</p>
-                <p className="text-sm text-muted-foreground">Angi and Thumbtack charge each inquiry.</p>
+                <p className="font-medium">No pay-to-play ranking</p>
+                <p className="text-sm text-muted-foreground">Pros can&apos;t buy their way to the top.</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
@@ -137,7 +138,7 @@ export default async function HomePage() {
               <div>
                 <h2 className="font-serif text-3xl font-semibold">Featured pros</h2>
                 <p className="mt-2 text-muted-foreground">
-                  Membership is flat, so ordering follows rating and eligibility, not top bid.
+                  Ranked by rating, not by who paid the most.
                 </p>
               </div>
               <Link href="/for-pros" className="flex items-center gap-1 text-sm font-semibold text-accent hover:opacity-80">

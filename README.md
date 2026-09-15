@@ -28,12 +28,16 @@ Seed script: `node scripts/seed.js`.
 
 ## Admin
 
-Visit `/admin`. The password is set in the admin page (`atlanta-admin` by default).
-To change the password:
+Visit `/admin`. The password is checked on the server, never in the browser. It is read from
+an `ADMIN_PASSWORD` secret on the Supabase project and used by the `admin-pros` edge function,
+which performs listing changes with the service role key.
 
-1. Open `app/admin/page.tsx`.
-2. Edit the constant `ADMIN_PASSWORD` near the top of the file.
-3. Redeploy.
+1. Set an `ADMIN_PASSWORD` secret on the Supabase project.
+2. Sign in at `/admin` with that password.
+3. Until that secret exists, admin access stays closed.
+
+Seeding also requires `SUPABASE_SERVICE_ROLE_KEY`; the public anon key can only read approved
+listings.
 
 Admin can approve or unapprove listings, switch tiers, and toggle featured status. Changes
 show on the site within a minute thanks to revalidation.

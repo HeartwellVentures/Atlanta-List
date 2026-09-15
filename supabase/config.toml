@@ -1,2 +1,5 @@
 [functions.checkout]
 verify_jwt = false
+
+[functions.admin-pros]
+verify_jwt = false

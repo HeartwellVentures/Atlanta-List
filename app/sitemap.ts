@@ -10,7 +10,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/areas',
     '/quiz',
     '/for-pros',
-    '/admin',
     ...trades.map((t) => `/${t.slug}`),
     ...neighborhoods.map((n) => `/areas/${n.slug}`),
   ];

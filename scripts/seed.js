@@ -3,9 +3,11 @@ const { createClient } = require('@supabase/supabase-js');
 const rows = require('./seed-data.js');
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
 if (!url || !key) {
-  console.error('Missing Supabase credentials.');
+  console.error(
+    'Missing Supabase credentials. Seeding requires SUPABASE_SERVICE_ROLE_KEY; the public anon key cannot write listings.'
+  );
   process.exit(1);
 }
 const supabase = createClient(url, key);

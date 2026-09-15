@@ -1,52 +1,74 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { supabase, Pro } from '@/lib/supabase';
+import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
-const ADMIN_PASSWORD = 'atlanta-admin';
+interface AdminPro {
+  id: string;
+  slug: string;
+  name: string;
+  trade_name: string;
+  tier: 'free' | 'featured' | 'premium';
+  approved: boolean;
+}
+
+const endpoint = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/admin-pros`;
 
 export default function AdminPage() {
-  const [authorised, setAuthorised] = useState(false);
   const [password, setPassword] = useState('');
+  const [authorised, setAuthorised] = useState(false);
   const [error, setError] = useState('');
-  const [pros, setPros] = useState<Pro[]>([]);
+  const [pros, setPros] = useState<AdminPro[]>([]);
   const [message, setMessage] = useState('');
 
-  useEffect(() => {
-    if (typeof window !== 'undefined' && window.sessionStorage.getItem('atlanta-admin-auth')) {
-      setAuthorised(true);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (authorised) loadPros();
-  }, [authorised]);
-
-  async function loadPros() {
-    const { data } = await supabase.from('pros').select('*');
-    setPros((data ?? []) as Pro[]);
+  async function callAdmin(payload: Record<string, unknown>) {
+    const res = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '',
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''}`,
+      },
+      body: JSON.stringify({ ...payload, password }),
+    });
+    const data = await res.json().catch(() => ({}));
+    return { ok: res.ok, status: res.status, data } as {
+      ok: boolean;
+      status: number;
+      data: { pros?: AdminPro[]; error?: string };
+    };
   }
 
-  function handleLogin(e: React.FormEvent) {
+  async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
-    if (password === ADMIN_PASSWORD) {
-      window.sessionStorage.setItem('atlanta-admin-auth', 'yes');
+    setError('');
+    const { ok, status, data } = await callAdmin({ action: 'list' });
+    if (ok) {
+      setPros(data.pros ?? []);
       setAuthorised(true);
-      setError('');
+    } else if (status === 503) {
+      setError(
+        'Admin access has not been set up yet. Add an ADMIN_PASSWORD secret to the project, then try again.'
+      );
     } else {
       setError('Wrong password.');
     }
   }
 
-  async function updatePro(id: string, update: Partial<Pro>) {
-    const { error: updateError } = await supabase.from('pros').update(update).eq('id', id);
-    if (updateError) setMessage('Update failed: ' + updateError.message);
-    else {
-      setMessage('Saved.');
-      loadPros();
+  async function refresh() {
+    const { ok, data } = await callAdmin({ action: 'list' });
+    if (ok) setPros(data.pros ?? []);
+  }
+
+  async function updatePro(id: string, update: Partial<Pick<AdminPro, 'approved' | 'tier'>>) {
+    const { ok } = await callAdmin({ action: 'update', id, ...update });
+    if (!ok) {
+      setMessage('Could not save that change.');
+      return;
     }
+    setMessage('Saved.');
+    refresh();
   }
 
   if (!authorised) {
@@ -54,7 +76,8 @@ export default function AdminPage() {
       <div className="mx-auto max-w-sm px-4 py-16">
         <h1 className="font-serif text-2xl font-bold">Admin sign-in</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Admin access uses a simple password. To change it, edit the pathname constant in the admin page.
+          Admin access is checked on the server. The password is stored as a project secret named
+          ADMIN_PASSWORD.
         </p>
         <form onSubmit={handleLogin} className="mt-6 space-y-3">
           <Input
@@ -107,7 +130,7 @@ export default function AdminPage() {
                 <td className="px-4 py-2">
                   <select
                     value={p.tier}
-                    onChange={(e) => updatePro(p.id, { tier: e.target.value as Pro['tier'] })}
+                    onChange={(e) => updatePro(p.id, { tier: e.target.value as AdminPro['tier'] })}
                     className="rounded border border-border bg-card px-2 py-1 text-sm"
                   >
                     <option value="free">Free</option>
@@ -134,7 +157,8 @@ export default function AdminPage() {
         <button
           className="rounded border border-border px-4 py-2 text-sm hover:bg-secondary"
           onClick={() => {
-            window.sessionStorage.removeItem('atlanta-admin-auth');
+            setPassword('');
+            setPros([]);
             setAuthorised(false);
           }}
         >

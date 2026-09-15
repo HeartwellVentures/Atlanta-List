@@ -6,6 +6,7 @@ import { Breadcrumbs } from '@/components/breadcrumbs';
 import { Schema } from '@/components/schema';
 import { TradeIcon } from '@/components/trade-icon';
 import QuoteForm from '@/components/quote-form';
+import { safeExternalUrl } from '@/lib/utils';
 
 export const revalidate = 60;
 
@@ -25,6 +26,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ProPage({ params }: Props) {
   const pro = await getProBySlug(params.slug);
   if (!pro || !pro.approved) notFound();
+
+  const websiteUrl = safeExternalUrl(pro.website);
+  const reviewUrl = safeExternalUrl(pro.review_url);
 
   const localBusinessSchema = {
     '@context': 'https://schema.org',
@@ -48,7 +52,7 @@ export default async function ProPage({ params }: Props) {
             reviewCount: pro.review_count,
           }
         : undefined,
-    url: pro.website,
+    url: websiteUrl ?? undefined,
   };
 
   return (
@@ -84,9 +88,9 @@ export default async function ProPage({ params }: Props) {
             <span className="text-sm text-muted-foreground">
               {(pro.review_count ?? 0).toLocaleString()} aggregated reviews
             </span>
-            {pro.review_url && (
+            {reviewUrl && (
               <a
-                href={pro.review_url}
+                href={reviewUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-sm font-semibold text-accent hover:opacity-80"
@@ -116,18 +120,18 @@ export default async function ProPage({ params }: Props) {
               <p className="mt-1 text-sm text-muted-foreground">{pro.hours}</p>
             </div>
           )}
-          {pro.website && (
+          {websiteUrl && (
             <div>
               <p className="flex items-center gap-2 text-sm font-semibold">
                 <Globe className="h-4 w-4 text-muted-foreground" /> Website
               </p>
               <a
-                href={pro.website}
+                href={websiteUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-1 text-sm text-accent hover:opacity-80"
               >
-                {pro.website.replace(/^https?:\/\//, '')}
+                {websiteUrl.replace(/^https?:\/\//, '')}
               </a>
             </div>
           )}
