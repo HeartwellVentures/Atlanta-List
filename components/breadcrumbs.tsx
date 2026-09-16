@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
 import { serializeJsonLd } from '@/components/schema';
+import { SITE_URL } from '@/lib/site';
 
 export interface Crumb {
   label: string;
@@ -9,12 +10,12 @@ export interface Crumb {
 
 export function Breadcrumbs({ items }: { items: Crumb[] }) {
   const schemaItems = [
-    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://theatlantalist.com/' },
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
     ...items.map((c, i) => ({
       '@type': 'ListItem',
       position: i + 2,
       name: c.label,
-      ...(c.href ? { item: `https://theatlantalist.com${c.href}` } : {}),
+      ...(c.href ? { item: `${SITE_URL}${c.href}` } : {}),
     })),
   ];
   return (

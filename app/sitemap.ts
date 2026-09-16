@@ -2,9 +2,10 @@ import { MetadataRoute } from 'next';
 import { trades } from '../lib/trades';
 import { neighborhoods } from '../lib/neighborhoods';
 import { supabase } from '../lib/supabase';
+import { SITE_URL } from '../lib/site';
 
 function siteUrl(): string {
-  return process.env.NEXT_PUBLIC_SITE_URL ?? 'https://theatlantalist.com';
+  return SITE_URL;
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

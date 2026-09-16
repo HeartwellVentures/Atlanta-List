@@ -6,6 +6,7 @@ import { ProCard } from '@/components/pro-card';
 import { FeaturedSpotlight, getSpotlightPros } from '@/components/featured-spotlight';
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { Schema } from '@/components/schema';
+import { SITE_URL } from '@/lib/site';
 import {
   Accordion,
   AccordionContent,
@@ -29,6 +30,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${trade.name} in Atlanta`,
     description: trade.intro,
+    alternates: { canonical: `/${trade.slug}` },
+    openGraph: {
+      title: `${trade.name} in Atlanta`,
+      description: trade.intro,
+      type: 'website',
+    },
   };
 }
 
@@ -50,6 +57,32 @@ export default async function TradePage({ params }: Props) {
     })),
   };
 
+  // Every ranked pro on the page, so search and AI engines can cite the ranking directly.
+  const itemListSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: `${trade.name} in Atlanta`,
+    itemListElement: pros.map((p, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      item: {
+        '@type': 'LocalBusiness',
+        name: p.name,
+        url: `${SITE_URL}/pro/${p.slug}`,
+        telephone: p.phone,
+        ...(p.rating && p.review_count
+          ? {
+              aggregateRating: {
+                '@type': 'AggregateRating',
+                ratingValue: p.rating,
+                reviewCount: p.review_count,
+              },
+            }
+          : {}),
+      },
+    })),
+  };
+
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
       <Breadcrumbs items={[{ label: 'Trades', href: '/trades' }, { label: trade.name }]} />
@@ -59,6 +92,7 @@ export default async function TradePage({ params }: Props) {
       </div>
 
       <Schema data={faqSchema} />
+      <Schema data={itemListSchema} />
 
       {spotlight.length > 0 && (
         <div className="mt-10">

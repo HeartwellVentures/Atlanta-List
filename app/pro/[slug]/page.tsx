@@ -19,9 +19,17 @@ interface Props {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const pro = await getProBySlug(params.slug);
   if (!pro) return {};
+  const description = `${pro.trade_name} serving Atlanta. Rating ${pro.rating?.toFixed(1) ?? 'N/A'}, ${pro.review_count?.toLocaleString() ?? 'many'} reviews.`;
   return {
     title: `${pro.name}, ${pro.trade_name} in Atlanta`,
-    description: `${pro.trade_name} serving Atlanta. Rating ${pro.rating?.toFixed(1) ?? 'N/A'}, ${pro.review_count?.toLocaleString() ?? 'many'} reviews.`,
+    description,
+    alternates: { canonical: `/pro/${pro.slug}` },
+    openGraph: {
+      title: `${pro.name}, ${pro.trade_name} in Atlanta`,
+      description,
+      type: 'profile',
+      ...(pro.photo_url ? { images: [pro.photo_url] } : {}),
+    },
   };
 }
 
@@ -39,6 +47,9 @@ export default async function ProPage({ params }: Props) {
     '@type': 'LocalBusiness',
     name: pro.name,
     telephone: pro.phone,
+    ...(pro.photo_url ? { image: pro.photo_url } : {}),
+    // Hours are free text in the data model; emitted as text until structured hours exist.
+    ...(pro.hours ? { openingHours: pro.hours } : {}),
     address: pro.address
       ? {
           '@type': 'PostalAddress',

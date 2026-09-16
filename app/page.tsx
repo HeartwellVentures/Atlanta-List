@@ -5,6 +5,8 @@ import { neighborhoods } from '@/lib/neighborhoods';
 import { getApprovedPros, Pro } from '@/lib/supabase';
 import { ProCard } from '@/components/pro-card';
 import { TradeIcon } from '@/components/trade-icon';
+import { Schema } from '@/components/schema';
+import { SITE_URL } from '@/lib/site';
 
 export const metadata = {
   title: {
@@ -36,8 +38,27 @@ export default async function HomePage() {
   );
   const featured = perTrade.filter(Boolean) as Pro[];
 
+  const organizationSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'The Atlanta List',
+    url: `${SITE_URL}/`,
+    description:
+      'A curated directory of top-rated Atlanta plumbers, electricians, HVAC techs, roofers, and house cleaners. Ranked by rating, never by who paid.',
+    areaServed: { '@type': 'City', name: 'Atlanta' },
+  };
+
+  const websiteSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'The Atlanta List',
+    url: `${SITE_URL}/`,
+  };
+
   return (
     <>
+      <Schema data={organizationSchema} />
+      <Schema data={websiteSchema} />
       {/* Cinematic full-bleed hero */}
       <section className="relative flex min-h-[88vh] flex-col justify-end overflow-hidden">
         <img
