@@ -280,6 +280,9 @@ export default function AdminPage() {
   } | null>(null);
   const [deciding, setDeciding] = useState(false);
 
+  const [newPassword, setNewPassword] = useState('');
+  const [changingPassword, setChangingPassword] = useState(false);
+
   const noticeTimer = useRef<number | null>(null);
   function flash(message: string) {
     setNotice(message);
@@ -478,6 +481,24 @@ export default function AdminPage() {
     return claims.filter((c) => c.status === claimStatusFilter);
   }, [claims, claimStatusFilter]);
 
+  async function changePassword(e: React.FormEvent) {
+    e.preventDefault();
+    if (newPassword.length < 12) {
+      flash('Password must be at least 12 characters.');
+      return;
+    }
+    setChangingPassword(true);
+    const { ok, data } = await callAdmin({ action: 'change_password', new_password: newPassword });
+    setChangingPassword(false);
+    if (!ok) {
+      flash(data.error ?? 'Could not change password.');
+      return;
+    }
+    setPassword(newPassword);
+    setNewPassword('');
+    flash('Password changed.');
+  }
+
   function signOut() {
     setPassword('');
     setPros([]);
@@ -612,6 +633,7 @@ export default function AdminPage() {
               </Badge>
             )}
           </TabsTrigger>
+          <TabsTrigger value="settings">Settings</TabsTrigger>
         </TabsList>
 
         <TabsContent value="listings" className="mt-6">
@@ -849,6 +871,31 @@ export default function AdminPage() {
               </TableBody>
             </Table>
           </div>
+        </TabsContent>
+        <TabsContent value="settings" className="mt-6">
+          <Card className="max-w-md">
+            <CardHeader>
+              <CardTitle>Change admin password</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={changePassword} className="space-y-3">
+                <p className="text-sm text-muted-foreground">
+                  Use a password of at least 12 characters. After changing it, you will need the new
+                  password next time you sign in.
+                </p>
+                <Input
+                  type="password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  placeholder="New password"
+                  autoComplete="new-password"
+                />
+                <Button type="submit" disabled={changingPassword}>
+                  {changingPassword ? 'Saving...' : 'Change password'}
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
 
