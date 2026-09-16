@@ -6,6 +6,7 @@ import { supabase } from '@/lib/supabase';
 import { Check, ArrowRight } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import NewListingRequest from '@/components/new-listing-request';
 
 const tiers = [
   {
@@ -17,13 +18,13 @@ const tiers = [
   {
     name: 'Featured',
     price: '$79 / month',
-    notes: ['Featured badge', 'Higher ranking across the directory', 'Priority neighborhood placement'],
+    notes: ['Featured badge', 'Featured placement zone on trade pages', 'Priority neighborhood placement'],
     highlight: true,
   },
   {
     name: 'Premium',
     price: '$599 / year',
-    notes: ['Premium badge', 'Homepage placement', 'Top ranking plus partner outreach'],
+    notes: ['Premium badge', 'Homepage placement', 'Partner outreach'],
     highlight: true,
   },
 ];
@@ -132,9 +133,7 @@ export default function ForProsPage() {
         {searchDone && (
           <div className="mt-4 rounded-lg bg-card p-4">
             {results.length === 0 ? (
-              <p className="text-sm text-muted-foreground">
-                No listing found for "{query}". You can still be featured with a new listing.
-              </p>
+              <NewListingRequest initialName={query} />
             ) : (
               <div className="grid gap-3">
                 {results.map((r) => (

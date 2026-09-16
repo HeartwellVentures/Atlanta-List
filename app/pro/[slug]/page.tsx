@@ -2,10 +2,12 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Star, MapPin, Phone, Clock, Globe } from 'lucide-react';
 import { getProBySlug, getApprovedPros } from '@/lib/supabase';
+import { tradeImage } from '@/lib/trades';
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { Schema } from '@/components/schema';
 import { TradeIcon } from '@/components/trade-icon';
 import QuoteForm from '@/components/quote-form';
+import ClaimForm from '@/components/claim-form';
 import { safeExternalUrl } from '@/lib/utils';
 
 export const revalidate = 60;
@@ -18,7 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const pro = await getProBySlug(params.slug);
   if (!pro) return {};
   return {
-    title: `${pro.name} | ${pro.trade_name} in Atlanta`,
+    title: `${pro.name}, ${pro.trade_name} in Atlanta`,
     description: `${pro.trade_name} serving Atlanta. Rating ${pro.rating?.toFixed(1) ?? 'N/A'}, ${pro.review_count?.toLocaleString() ?? 'many'} reviews.`,
   };
 }
@@ -69,6 +71,11 @@ export default async function ProPage({ params }: Props) {
       <Schema data={localBusinessSchema} />
 
       <div className="mt-6 rounded-2xl border border-border bg-card p-7 sm:p-9">
+        <img
+          src={pro.photo_url ?? tradeImage(pro.trade_slug)}
+          alt={pro.photo_url ? pro.name : `${pro.trade_name} at work in Atlanta`}
+          className="mb-6 aspect-[16/9] w-full rounded-xl object-cover"
+        />
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-4">
             <TradeIcon trade={pro.trade_slug} />
@@ -193,6 +200,16 @@ export default async function ProPage({ params }: Props) {
         </p>
         <div className="mt-5">
           <QuoteForm proId={pro.id} proName={pro.name} />
+        </div>
+      </section>
+
+      <section id="claim" className="mt-10 scroll-mt-24 rounded-2xl border border-border bg-card p-7 sm:p-9">
+        <h2 className="font-serif text-2xl font-semibold">Claim this listing</h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Own this business? Claim the listing to manage it and choose a membership tier.
+        </p>
+        <div className="mt-5">
+          <ClaimForm proSlug={pro.slug} proName={pro.name} />
         </div>
       </section>
     </div>

@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { neighborhoods } from '@/lib/neighborhoods';
 import { getApprovedPros } from '@/lib/supabase';
 import { ProCard } from '@/components/pro-card';
+import { FeaturedSpotlight, getSpotlightPros } from '@/components/featured-spotlight';
 import { Breadcrumbs } from '@/components/breadcrumbs';
 
 export const revalidate = 60;
@@ -15,7 +16,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const name = neighborhoods.find((n) => n.slug === params.slug)?.name;
   if (!name) return {};
   return {
-    title: `${name} home services | The Atlanta List`,
+    title: `${name} home services`,
     description: `Curated plumbers, electricians, HVAC techs, roofers, and cleaners serving ${name}.`,
   };
 }
@@ -25,6 +26,9 @@ export default async function NeighborhoodPage({ params }: Props) {
   if (!neighborhood) notFound();
 
   const pros = await getApprovedPros({ neighborhood: neighborhood.name });
+  const spotlight = getSpotlightPros(pros);
+  const spotlightIds = new Set(spotlight.map((p) => p.id));
+  const ranked = pros.filter((p) => !spotlightIds.has(p.id));
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
@@ -36,11 +40,16 @@ export default async function NeighborhoodPage({ params }: Props) {
       />
       <h1 className="mt-6 font-serif text-4xl font-bold">{neighborhood.name} pros</h1>
       <p className="mt-4 max-w-3xl text-muted-foreground">{neighborhood.intro}</p>
+      {spotlight.length > 0 && (
+        <div className="mt-10">
+          <FeaturedSpotlight pros={spotlight} />
+        </div>
+      )}
       <div className="mt-10 grid gap-4">
-        {pros.length === 0 ? (
+        {ranked.length === 0 ? (
           <p className="text-muted-foreground">No approved pros serving {neighborhood.name} yet.</p>
         ) : (
-          pros.map((p) => <ProCard key={p.id} pro={p} />)
+          ranked.map((p) => <ProCard key={p.id} pro={p} />)
         )}
       </div>
     </div>

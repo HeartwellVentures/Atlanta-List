@@ -12,7 +12,7 @@ export default function TradesIndex() {
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
       <h1 className="font-serif text-4xl font-bold">Browse by trade</h1>
       <p className="mt-3 text-muted-foreground">
-        Five trades, one curated list. Each page ranks pros by tier and rating, never by top bid.
+        Five trades, one curated list. Each page ranks pros by rating and review count. Paid featured spots are always labeled.
       </p>
       <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         {trades.map((t) => (

@@ -7,9 +7,11 @@ import { ProCard } from '@/components/pro-card';
 import { TradeIcon } from '@/components/trade-icon';
 
 export const metadata = {
-  title: 'The Atlanta List: Atlanta home pros you don\'t have to second-guess',
+  title: {
+    absolute: 'The Atlanta List: Atlanta home pros you don\'t have to second-guess',
+  },
   description:
-    'A curated directory of top-rated Atlanta plumbers, electricians, HVAC techs, roofers, and house cleaners. Real businesses, verified ratings, and rankings nobody can buy.',
+    'A curated directory of top-rated Atlanta plumbers, electricians, HVAC techs, roofers, and house cleaners. Real businesses, verified ratings. Ranked by rating, never by who paid, and paid featured spots are always labeled.',
 };
 
 export const revalidate = 60;
@@ -55,7 +57,8 @@ export default async function HomePage() {
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-cream drop-shadow-[0_1px_8px_rgba(0,0,0,0.6)]">
             A curated directory of top-rated plumbers, electricians, HVAC techs, roofers,
-            and house cleaners. Real businesses, verified ratings, and rankings nobody can buy.
+            and house cleaners. Real businesses, verified ratings, and rankings by
+            rating, never by who paid.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
@@ -83,8 +86,8 @@ export default async function HomePage() {
                 <Check className="h-4 w-4" />
               </span>
               <div>
-                <p className="font-medium">No pay-to-play ranking</p>
-                <p className="text-sm text-muted-foreground">Pros can&apos;t buy their way to the top.</p>
+                <p className="font-medium">Rankings can&apos;t be bought</p>
+                <p className="text-sm text-muted-foreground">Ranked by rating, never by who paid. Paid featured spots are always labeled.</p>
               </div>
             </div>
             <div className="flex items-start gap-3">

@@ -62,7 +62,7 @@ export const trades: Trade[] = [
       },
       {
         q: 'How do I pick an electrician from the list?',
-        a: 'Match the scope of your job to their listed specialties, compare ratings and review volume, then call. Rankings on The Atlanta List are based on ratings, never sold to the highest bidder.',
+        a: 'Match the scope of your job to their listed specialties, compare ratings and review volume, then call. Rankings on The Atlanta List are based on ratings and review counts. Paid featured spots are always labeled.',
       },
     ],
     skills: ['Panel upgrade', 'Outlet repair', 'Lighting',
@@ -156,4 +156,17 @@ export const trades: Trade[] = [
 
 export function getTrade(slug: string) {
   return trades.find((t) => t.slug === slug);
+}
+
+// Licensed fallback imagery (Pexels license) shown when a pro has no photo.
+const TRADE_IMAGES: Record<string, string> = {
+  plumbers: '/images/trades/plumbers.jpg',
+  electricians: '/images/trades/electricians.jpg',
+  hvac: '/images/trades/hvac.jpg',
+  roofers: '/images/trades/roofers.jpg',
+  cleaners: '/images/trades/cleaners.jpg',
+};
+
+export function tradeImage(slug: string): string {
+  return TRADE_IMAGES[slug] ?? TRADE_IMAGES.plumbers;
 }

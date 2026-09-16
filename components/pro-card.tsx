@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Star, MapPin } from 'lucide-react';
 import { TradeIcon } from '@/components/trade-icon';
+import { tradeImage } from '@/lib/trades';
 import type { Pro } from '@/lib/supabase';
 
 export function ProCard({ pro, compact = false }: { pro: Pro; compact?: boolean }) {
@@ -13,6 +14,12 @@ export function ProCard({ pro, compact = false }: { pro: Pro; compact?: boolean 
       href={`/pro/${pro.slug}`}
       className="group block rounded-xl border border-border bg-card p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
     >
+      <img
+        src={pro.photo_url ?? tradeImage(pro.trade_slug)}
+        alt={pro.photo_url ? pro.name : `${pro.trade_name} at work`}
+        loading="lazy"
+        className="mb-5 aspect-[16/9] w-full rounded-lg object-cover"
+      />
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
           <TradeIcon trade={pro.trade_slug} />

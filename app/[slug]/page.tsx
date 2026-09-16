@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { getTrade, trades } from '@/lib/trades';
 import { getApprovedPros } from '@/lib/supabase';
 import { ProCard } from '@/components/pro-card';
+import { FeaturedSpotlight, getSpotlightPros } from '@/components/featured-spotlight';
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { Schema } from '@/components/schema';
 import {
@@ -26,7 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const trade = getTrade(params.slug);
   if (!trade) return {};
   return {
-    title: `${trade.name} in Atlanta | The Atlanta List`,
+    title: `${trade.name} in Atlanta`,
     description: trade.intro,
   };
 }
@@ -35,6 +36,9 @@ export default async function TradePage({ params }: Props) {
   const trade = getTrade(params.slug);
   if (!trade) notFound();
   const pros = await getApprovedPros({ trade: params.slug });
+  const spotlight = getSpotlightPros(pros);
+  const spotlightIds = new Set(spotlight.map((p) => p.id));
+  const ranked = pros.filter((p) => !spotlightIds.has(p.id));
 
   const faqSchema = {
     '@context': 'https://schema.org',
@@ -56,11 +60,17 @@ export default async function TradePage({ params }: Props) {
 
       <Schema data={faqSchema} />
 
+      {spotlight.length > 0 && (
+        <div className="mt-10">
+          <FeaturedSpotlight pros={spotlight} />
+        </div>
+      )}
+
       <div className="mt-10 grid gap-4">
-        {pros.length === 0 ? (
+        {ranked.length === 0 ? (
           <p className="text-muted-foreground">No approved {trade.plural} yet.</p>
         ) : (
-          pros.map((p) => <ProCard key={p.id} pro={p} />)
+          ranked.map((p) => <ProCard key={p.id} pro={p} />)
         )}
       </div>
 

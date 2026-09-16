@@ -26,6 +26,7 @@ export interface Pro {
   review_url?: string | null;
   tier: 'free' | 'featured' | 'premium';
   approved: boolean;
+  photo_url?: string | null;
 }
 
 export async function getApprovedPros(filters?: {
@@ -48,8 +49,14 @@ export async function getApprovedPros(filters?: {
       (p.neighborhoods ?? []).includes(filters.neighborhood!)
     );
   }
-  const rank: Record<string, number> = { premium: 0, featured: 1, free: 2 };
-  pros.sort((a, b) => rank[a.tier] - rank[b.tier]);
+  // Rankings are strictly by rating, then review count, then name.
+  // Paid tiers buy labeled visibility, never rank.
+  pros.sort(
+    (a, b) =>
+      (b.rating ?? 0) - (a.rating ?? 0) ||
+      (b.review_count ?? 0) - (a.review_count ?? 0) ||
+      a.name.localeCompare(b.name)
+  );
   if (filters?.limit) pros = pros.slice(0, filters.limit);
   return pros;
 }
