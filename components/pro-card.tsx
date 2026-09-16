@@ -15,7 +15,7 @@ export function ProCard({ pro, compact = false }: { pro: Pro; compact?: boolean 
       className="group block rounded-xl border border-border bg-card p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
     >
       <img
-        src={pro.photo_url ?? tradeImage(pro.trade_slug)}
+        src={pro.photo_url ?? tradeImage(pro.trade_slug, pro.slug)}
         alt={pro.photo_url ? pro.name : `${pro.trade_name} at work`}
         loading="lazy"
         className="mb-5 aspect-[16/9] w-full rounded-lg object-cover"

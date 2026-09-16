@@ -72,7 +72,7 @@ export default async function ProPage({ params }: Props) {
 
       <div className="mt-6 rounded-2xl border border-border bg-card p-7 sm:p-9">
         <img
-          src={pro.photo_url ?? tradeImage(pro.trade_slug)}
+          src={pro.photo_url ?? tradeImage(pro.trade_slug, pro.slug)}
           alt={pro.photo_url ? pro.name : `${pro.trade_name} at work in Atlanta`}
           className="mb-6 aspect-[16/9] w-full rounded-xl object-cover"
         />

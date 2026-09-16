@@ -158,15 +158,25 @@ export function getTrade(slug: string) {
   return trades.find((t) => t.slug === slug);
 }
 
-// Licensed fallback imagery (Pexels license) shown when a pro has no photo.
-const TRADE_IMAGES: Record<string, string> = {
-  plumbers: '/images/trades/plumbers.jpg',
-  electricians: '/images/trades/electricians.jpg',
-  hvac: '/images/trades/hvac.jpg',
-  roofers: '/images/trades/roofers.jpg',
-  cleaners: '/images/trades/cleaners.jpg',
+// Licensed fallback imagery shown when a pro has no photo (Pexels license,
+// except roofers-2 which is U.S. federal public domain). Multiple images per
+// trade; the pro's slug picks one deterministically so cards in the same
+// trade don't all show the identical photo.
+const TRADE_IMAGES: Record<string, string[]> = {
+  plumbers: ['/images/trades/plumbers.jpg', '/images/trades/plumbers-2.webp'],
+  electricians: ['/images/trades/electricians.jpg', '/images/trades/electricians-2.jpg'],
+  hvac: ['/images/trades/hvac.jpg', '/images/trades/hvac-2.jpg'],
+  roofers: ['/images/trades/roofers.jpg', '/images/trades/roofers-2.jpg'],
+  cleaners: ['/images/trades/cleaners.jpg', '/images/trades/cleaners-2.jpg'],
 };
 
-export function tradeImage(slug: string): string {
-  return TRADE_IMAGES[slug] ?? TRADE_IMAGES.plumbers;
+function hashSeed(seed: string): number {
+  let h = 0;
+  for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) >>> 0;
+  return h;
+}
+
+export function tradeImage(tradeSlug: string, seed = ''): string {
+  const images = TRADE_IMAGES[tradeSlug] ?? TRADE_IMAGES.plumbers;
+  return images[hashSeed(seed || tradeSlug) % images.length];
 }
