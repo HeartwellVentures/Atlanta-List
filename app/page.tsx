@@ -32,8 +32,7 @@ const howItWorks = [
   { title: 'Hire with confidence', body: 'Every pro is rated by real Atlanta homeowners, not by who paid the most.' },
 ];
 
-const heroImage =
-  'https://images.pexels.com/photos/2815169/pexels-photo-2815169.jpeg?auto=compress&cs=tinysrgb&h=650&w=940';
+const heroImage = '/images/hero-home.jpg';
 
 export default async function HomePage() {
   const perTrade = await Promise.all(
