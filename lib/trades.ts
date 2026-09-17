@@ -9,6 +9,10 @@ export interface Trade {
   intro: string;
   faq: { q: string; a: string }[];
   skills: string[];
+  /** Atlanta-specific expert guidance, shown as a "good to know" block. */
+  expertNote: { title: string; body: string };
+  /** Honest cost snapshot, consistent with the trade FAQ answers. */
+  costRange: { low: string; typical: string; high: string };
 }
 
 export const trades: Trade[] = [
@@ -39,6 +43,15 @@ export const trades: Trade[] = [
     ],
     skills: ['Dripping faucet', 'Clogged drain', 'Water heater',
       'Burst pipe', 'Toilet repair', 'Gas line', 'Sewer line'],
+    expertNote: {
+      title: 'What Atlanta homeowners should know',
+      body: "Atlanta's humid summers make pipe sweating and condensation leaks common, and many intown homes still run on aging galvanized supply lines or cast-iron waste lines. If your home predates the 1980s, ask a pro about the condition of your main line before a small clog becomes a dig-up. And find your main water shutoff before you ever need it in a hurry.",
+    },
+    costRange: {
+      low: 'Service calls from $95',
+      typical: 'Typical visit $95\u2013$180',
+      high: '$500+ for main-line work',
+    },
   },
   {
     slug: 'electricians',
@@ -67,6 +80,15 @@ export const trades: Trade[] = [
     ],
     skills: ['Panel upgrade', 'Outlet repair', 'Lighting',
       'EV charger', 'Whole-home rewire', 'Generator', 'Smart home'],
+    expertNote: {
+      title: 'What Atlanta homeowners should know',
+      body: "Plenty of Atlanta homes still carry pre-war wiring or panels that predate modern demand, and the city's renovation surge keeps panel upgrades constant. If breakers trip regularly or lights dim when appliances kick on, that is a licensed-pro conversation, not a DIY weekend. Anything inside the panel, and any rewiring, belongs to a pro.",
+    },
+    costRange: {
+      low: 'Service calls from $80',
+      typical: 'Typical visit $80\u2013$150',
+      high: '$2,000+ for panel replacement',
+    },
   },
   {
     slug: 'hvac',
@@ -95,6 +117,15 @@ export const trades: Trade[] = [
     ],
     skills: ['AC repair', 'Furnace repair', 'Seasonal tune-up',
       'System replacement', 'Duct work', 'Thermostat', 'Heat pump'],
+    expertNote: {
+      title: 'What Atlanta homeowners should know',
+      body: 'Atlanta heat punishes neglected systems from late June through September, which is exactly why spring tune-ups exist: a visit in April beats a no-AC emergency in August. If your unit is over 12 years old and a repair quote tops half the cost of replacement, ask two pros for written opinions before you decide.',
+    },
+    costRange: {
+      low: 'Tune-ups $85\u2013$150',
+      typical: 'Repairs vary by part',
+      high: '$5,000+ for full replacement',
+    },
   },
   {
     slug: 'roofers',
@@ -123,6 +154,15 @@ export const trades: Trade[] = [
     ],
     skills: ['Roof repair', 'Full replacement', 'Storm damage',
       'Metal roof', 'Gutters', 'Inspection'],
+    expertNote: {
+      title: 'What Atlanta homeowners should know',
+      body: "Atlanta's storm season and heavy tree cover mean most roof damage here starts with falling limbs and wind-lifted shingles, not age alone. After any major storm, get an inspection before the next weather window, and compare estimates on identical scope: tear-off versus overlay, materials, warranty terms, and start date.",
+    },
+    costRange: {
+      low: 'Inspections often free',
+      typical: 'Shingle replacement $8k\u2013$16k',
+      high: 'Metal roofs run higher',
+    },
   },
   {
     slug: 'cleaners',
@@ -151,6 +191,15 @@ export const trades: Trade[] = [
     ],
     skills: ['Recurring cleaning', 'Deep clean', 'Move-out clean',
       'Green products', 'Kitchen detail', 'Bathroom detail'],
+    expertNote: {
+      title: 'What Atlanta homeowners should know',
+      body: "If your home has not had a professional clean in a while, start with a deep clean and then move to recurring visits. That is the sequence that keeps pricing predictable. Most Atlanta cleaners bring their own supplies, and many offer green or fragrance-free options if you ask.",
+    },
+    costRange: {
+      low: 'Recurring visits $110\u2013$180',
+      typical: 'Flat-rate quotes are the norm',
+      high: 'Deep cleans cost more',
+    },
   },
 ];
 

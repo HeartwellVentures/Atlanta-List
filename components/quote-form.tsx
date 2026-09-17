@@ -68,6 +68,9 @@ export default function QuoteForm({ proId, proName }: { proId: string; proName: 
         required
       />
       {error && <p className="text-sm text-destructive">{error}</p>}
+      <p className="text-xs text-muted-foreground">
+        Free to send. No obligation, and your details go only to {proName}.
+      </p>
       <Button type="submit" disabled={loading} className="bg-accent text-accent-foreground hover:opacity-90">
         {loading ? 'Sending...' : `Request quote from ${proName}`}
       </Button>

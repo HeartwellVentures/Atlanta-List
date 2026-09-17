@@ -4,8 +4,7 @@ export interface Neighborhood {
   intro: string;
 }
 
-export const neighborhoods: Neighborhood[] = [
-  {
+export const neighborhoods: Neighborhood[] = [  {
     slug: 'buckhead',
     name: 'Buckhead',
     intro: 'Buckhead\'s tree-canopied streets carry everything from 1920s estates to midcentury ranches needing expert care.',
@@ -46,3 +45,11 @@ export const neighborhoods: Neighborhood[] = [
     intro: 'Brookhaven\'s brick ranches and newer infill homes lean on pros who keep older neighborhoods sharp.',
   },
 ];
+
+/** Map a pro's neighborhood name to its area-page slug, or null when unknown. */
+export function neighborhoodSlug(name: string): string | null {
+  const found = neighborhoods.find(
+    (n) => n.name.toLowerCase() === name.trim().toLowerCase()
+  );
+  return found ? found.slug : null;
+}

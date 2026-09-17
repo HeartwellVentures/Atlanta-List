@@ -1,12 +1,15 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import Link from 'next/link';
 import { Star, MapPin, Phone, Clock, Globe } from 'lucide-react';
 import { getProBySlug, getApprovedPros, Pro } from '@/lib/supabase';
 import { tradeImage } from '@/lib/trades';
+import { neighborhoodSlug } from '@/lib/neighborhoods';
 import { DATA_VERIFIED_LABEL } from '@/lib/site';
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { Schema } from '@/components/schema';
 import { TradeIcon } from '@/components/trade-icon';
+import { StickyProCta } from '@/components/sticky-pro-cta';
 import QuoteForm from '@/components/quote-form';
 import ClaimForm from '@/components/claim-form';
 import {
@@ -149,7 +152,7 @@ export default async function ProPage({ params }: Props) {
   };
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6">
+    <div className="mx-auto max-w-4xl px-4 py-10 pb-28 sm:px-6 md:pb-10">
       <Breadcrumbs
         items={[{ label: pro.trade_name, href: `/${pro.trade_slug}` }, { label: pro.name }]}
       />
@@ -261,11 +264,22 @@ export default async function ProPage({ params }: Props) {
           <div className="mt-7">
             <p className="text-sm font-semibold">Service areas</p>
             <div className="mt-2 flex flex-wrap gap-2">
-              {pro.neighborhoods.map((n) => (
-                <span key={n} className="rounded-full border border-border px-3 py-1 text-xs">
-                  {n}
-                </span>
-              ))}
+              {pro.neighborhoods.map((n) => {
+                const slug = neighborhoodSlug(n);
+                return slug ? (
+                  <Link
+                    key={n}
+                    href={`/areas/${slug}`}
+                    className="rounded-full border border-border px-3 py-1 text-xs transition hover:border-accent hover:text-accent"
+                  >
+                    {n}
+                  </Link>
+                ) : (
+                  <span key={n} className="rounded-full border border-border px-3 py-1 text-xs">
+                    {n}
+                  </span>
+                );
+              })}
             </div>
           </div>
         )}
@@ -288,7 +302,7 @@ export default async function ProPage({ params }: Props) {
         </p>
       </div>
 
-      <section className="mt-10 rounded-2xl border border-border bg-card p-7 sm:p-9">
+      <section id="quote" className="mt-10 scroll-mt-24 rounded-2xl border border-border bg-card p-7 sm:p-9">
         <h2 className="font-serif text-2xl font-semibold">Request a quote</h2>
         <p className="mt-2 text-sm text-muted-foreground">
           Your request goes straight to the pro. No middleman, no call center.
@@ -319,6 +333,8 @@ export default async function ProPage({ params }: Props) {
           <ClaimForm proSlug={pro.slug} proName={pro.name} />
         </div>
       </section>
+
+      {pro.phone && <StickyProCta phone={pro.phone} proName={pro.name} />}
     </div>
   );
 }
