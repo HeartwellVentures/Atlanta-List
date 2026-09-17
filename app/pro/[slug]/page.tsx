@@ -1,16 +1,47 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Star, MapPin, Phone, Clock, Globe } from 'lucide-react';
-import { getProBySlug, getApprovedPros } from '@/lib/supabase';
+import { getProBySlug, getApprovedPros, Pro } from '@/lib/supabase';
 import { tradeImage } from '@/lib/trades';
+import { DATA_VERIFIED_LABEL } from '@/lib/site';
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { Schema } from '@/components/schema';
 import { TradeIcon } from '@/components/trade-icon';
 import QuoteForm from '@/components/quote-form';
 import ClaimForm from '@/components/claim-form';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
 import { safeExternalUrl } from '@/lib/utils';
 
 export const revalidate = 60;
+
+/** Answer-first summary: a quotable identity line for search snippets, AI
+ *  answers, and the visible page lede. Built only from verified fields. */
+function proSummary(pro: Pro): string {
+  const trade =
+    pro.trade_name === 'HVAC tech' ? 'HVAC tech' : pro.trade_name.toLowerCase();
+  const article = /^[aeiou]/i.test(pro.trade_name) ? 'an' : 'a';
+  const area =
+    pro.neighborhoods && pro.neighborhoods.length > 0 && pro.neighborhoods.length <= 3
+      ? pro.neighborhoods.join(', ')
+      : 'the Atlanta area';
+  const proof =
+    pro.rating && pro.review_count
+      ? `rated ${pro.rating.toFixed(1)} across ${pro.review_count.toLocaleString()} homeowner reviews`
+      : 'rated by Atlanta homeowners';
+  const specialties =
+    pro.services && pro.services.length
+      ? `, known for ${pro.services
+          .slice(0, 2)
+          .map((s) => s.toLowerCase())
+          .join(' and ')}`
+      : '';
+  return `${pro.name} is ${article} ${trade} serving ${area}, ${proof}${specialties}.`;
+}
 
 interface Props {
   params: { slug: string };
@@ -19,7 +50,7 @@ interface Props {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const pro = await getProBySlug(params.slug);
   if (!pro) return {};
-  const description = `${pro.trade_name} serving Atlanta. Rating ${pro.rating?.toFixed(1) ?? 'N/A'}, ${pro.review_count?.toLocaleString() ?? 'many'} reviews.`;
+  const description = proSummary(pro);
   return {
     title: `${pro.name}, ${pro.trade_name} in Atlanta`,
     description,
@@ -28,7 +59,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: `${pro.name}, ${pro.trade_name} in Atlanta`,
       description,
       type: 'profile',
-      ...(pro.photo_url ? { images: [pro.photo_url] } : {}),
+      images: [pro.photo_url ?? tradeImage(pro.trade_slug, pro.slug)],
     },
   };
 }
@@ -47,6 +78,9 @@ export default async function ProPage({ params }: Props) {
     '@type': 'LocalBusiness',
     name: pro.name,
     telephone: pro.phone,
+    // Admin-written description when present; otherwise the generated
+    // answer-first summary (built only from verified fields).
+    description: pro.description ?? proSummary(pro),
     ...(pro.photo_url ? { image: pro.photo_url } : {}),
     // Hours are free text in the data model; emitted as text until structured hours exist.
     ...(pro.hours ? { openingHours: pro.hours } : {}),
@@ -73,6 +107,47 @@ export default async function ProPage({ params }: Props) {
       : undefined,
   };
 
+  // Per-listing FAQs, generated only from verified fields (no invented facts).
+  const faqs = [
+    {
+      q: `How do I contact ${pro.name}?`,
+      a: `Call ${pro.name} at ${pro.phone}${pro.hours ? ` (${pro.hours})` : ''}, or send a quote request through the form on this page. Your request goes straight to the pro; The Atlanta List never sells or shares inquiry leads.`,
+    },
+    {
+      q: `What areas does ${pro.name} serve?`,
+      a:
+        pro.neighborhoods && pro.neighborhoods.length
+          ? `${pro.name} serves ${pro.neighborhoods.join(', ')}.`
+          : `${pro.name} serves the Atlanta area.`,
+    },
+    ...(pro.services && pro.services.length
+      ? [
+          {
+            q: `What services does ${pro.name} offer?`,
+            a: `${pro.name} offers ${pro.services.join(', ').toLowerCase()}.`,
+          },
+        ]
+      : []),
+    ...(pro.rating
+      ? [
+          {
+            q: `Is ${pro.name} well reviewed?`,
+            a: `Yes. ${pro.name} is rated ${pro.rating.toFixed(1)} out of 5 across ${(pro.review_count ?? 0).toLocaleString()} homeowner reviews.`,
+          },
+        ]
+      : []),
+  ];
+
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  };
+
   return (
     <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6">
       <Breadcrumbs
@@ -80,6 +155,7 @@ export default async function ProPage({ params }: Props) {
       />
 
       <Schema data={localBusinessSchema} />
+      <Schema data={faqSchema} />
 
       <div className="mt-6 rounded-2xl border border-border bg-card p-7 sm:p-9">
         <img
@@ -108,6 +184,10 @@ export default async function ProPage({ params }: Props) {
             )}
           </div>
         </div>
+
+        <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">
+          {pro.description ?? proSummary(pro)}
+        </p>
 
         {pro.rating && (
           <div className="mt-6 flex items-baseline gap-3">
@@ -202,6 +282,10 @@ export default async function ProPage({ params }: Props) {
             </ul>
           </div>
         )}
+
+        <p className="mt-7 text-xs text-muted-foreground">
+          Listing details verified {DATA_VERIFIED_LABEL} against public sources. Ratings are snapshots; see the live review page for the current number.
+        </p>
       </div>
 
       <section className="mt-10 rounded-2xl border border-border bg-card p-7 sm:p-9">
@@ -212,6 +296,18 @@ export default async function ProPage({ params }: Props) {
         <div className="mt-5">
           <QuoteForm proId={pro.id} proName={pro.name} />
         </div>
+      </section>
+
+      <section className="mt-10 rounded-2xl border border-border bg-card p-7 sm:p-9">
+        <h2 className="font-serif text-2xl font-semibold">Frequently asked questions</h2>
+        <Accordion type="single" collapsible className="mt-4">
+          {faqs.map((f, i) => (
+            <AccordionItem key={i} value={`q-${i}`}>
+              <AccordionTrigger className="text-left font-medium">{f.q}</AccordionTrigger>
+              <AccordionContent className="text-muted-foreground">{f.a}</AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
       </section>
 
       <section id="claim" className="mt-10 scroll-mt-24 rounded-2xl border border-border bg-card p-7 sm:p-9">

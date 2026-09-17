@@ -65,7 +65,7 @@ export function SiteFooter() {
       </div>
       <div className="border-t border-border">
         <p className="mx-auto max-w-6xl px-4 py-4 text-xs text-muted-foreground sm:px-6">
-          The Atlanta List is an independent directory. Rankings are based on ratings and review counts. Paid featured spots are always labeled.
+          The Atlanta List is an independent directory. Rankings are based on ratings and review counts. Paid featured spots are always labeled. Directory data compiled September 2026 from public business sources; ratings link to live review pages.
         </p>
       </div>
     </footer>

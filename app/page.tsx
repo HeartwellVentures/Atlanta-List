@@ -14,6 +14,13 @@ export const metadata = {
   },
   description:
     'A curated directory of top-rated Atlanta plumbers, electricians, HVAC techs, roofers, and house cleaners. Real businesses, verified ratings. Ranked by rating, never by who paid, and paid featured spots are always labeled.',
+  openGraph: {
+    title: 'The Atlanta List: Atlanta home pros you don\'t have to second-guess',
+    description:
+      'A curated directory of top-rated Atlanta plumbers, electricians, HVAC techs, roofers, and house cleaners. Real businesses, verified ratings. Ranked by rating, never by who paid.',
+    type: 'website',
+    images: ['/images/trades/plumbers.jpg'],
+  },
 };
 
 export const revalidate = 60;

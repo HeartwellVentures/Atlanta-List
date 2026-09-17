@@ -27,6 +27,8 @@ export interface Pro {
   tier: 'free' | 'featured' | 'premium';
   approved: boolean;
   photo_url?: string | null;
+  description?: string | null;
+  license_number?: string | null;
 }
 
 export async function getApprovedPros(filters?: {

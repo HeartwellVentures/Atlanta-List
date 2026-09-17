@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getTrade, trades } from '@/lib/trades';
+import { getTrade, trades, tradeImage } from '@/lib/trades';
 import { getApprovedPros } from '@/lib/supabase';
 import { ProCard } from '@/components/pro-card';
 import { FeaturedSpotlight, getSpotlightPros } from '@/components/featured-spotlight';
@@ -35,6 +35,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: `${trade.name} in Atlanta`,
       description: trade.intro,
       type: 'website',
+      images: [tradeImage(trade.slug, trade.slug)],
     },
   };
 }

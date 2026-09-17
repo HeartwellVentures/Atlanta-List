@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { neighborhoods } from '@/lib/neighborhoods';
+import { tradeImage } from '@/lib/trades';
 import { getApprovedPros } from '@/lib/supabase';
 import { ProCard } from '@/components/pro-card';
 import { FeaturedSpotlight, getSpotlightPros } from '@/components/featured-spotlight';
@@ -26,6 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: `${name} home services`,
       description,
       type: 'website',
+      images: [tradeImage('plumbers', params.slug)],
     },
   };
 }
