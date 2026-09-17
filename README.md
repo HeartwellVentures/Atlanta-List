@@ -26,6 +26,28 @@ The app runs at http://localhost:3000 .
 
 Seed script: `node scripts/seed.js`.
 
+## Data sourcing
+
+Seed records were compiled in September 2026 from public sources: company
+websites, Yahoo Local "best of" lists, Best Pick Reports, and second-agent
+research. The intended bar is confirmation on two sources.
+
+Honest accounting of where the data stands:
+
+- Ratings and review counts are snapshots from public review platforms, not
+  live numbers. Profile pages link to the Google or Yelp page so visitors see
+  the current figure.
+- `license_number` is unpopulated across all seed records; no license data has
+  been collected yet. The "Public records" badge means details were compiled
+  from public listings, not that licenses were checked.
+- `photo_url` is unpopulated; cards use licensed trade fallback photos until
+  pros upload their own.
+- TE Certified appears as two listings (plumbing and electrical). It is one
+  company operating in multiple trades; the plumbing record currently points at
+  the company's electricians domain and needs re-verification.
+- Anything else not confirmed on two sources: treat the record as a starting
+  point, not a vetted endorsement. Corrections welcome via the contact page.
+
 ## Admin
 
 Visit `/admin`. The password is checked on the server, never in the browser. It is read from

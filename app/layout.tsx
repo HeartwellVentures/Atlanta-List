@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     template: '%s | The Atlanta List',
   },
   description:
-    'A curated directory of Atlanta\'s top-rated plumbers, electricians, HVAC techs, roofers, and cleaners. Real businesses, verified ratings. Ranked by rating, never by who paid, and paid featured spots are always labeled.',
+    'A curated directory of Atlanta\'s top-rated plumbers, electricians, HVAC techs, roofers, and cleaners. Real businesses, ratings from public review platforms. Ranked by rating, never by who paid, and paid featured spots are always labeled.',
   openGraph: {
     type: 'website',
     siteName: 'The Atlanta List',

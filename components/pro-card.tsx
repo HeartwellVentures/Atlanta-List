@@ -35,10 +35,10 @@ export function ProCard({ pro, compact = false }: { pro: Pro; compact?: boolean 
         <div className="flex flex-col items-end gap-1.5">
           <span
             className="flex items-center gap-1 rounded-full bg-accent/10 px-3 py-1 text-xs font-semibold text-accent"
-            title="Listing details verified against public sources"
+            title="Business details compiled from public listings and review platforms, September 2026"
           >
             <BadgeCheck className="h-3.5 w-3.5" />
-            Verified
+            Public records
           </span>
           {pro.tier === 'featured' && (
             <span className="rounded-full bg-secondary px-3 py-1 text-xs font-semibold text-secondary-foreground">

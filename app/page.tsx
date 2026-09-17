@@ -13,11 +13,11 @@ export const metadata = {
     absolute: 'The Atlanta List: Atlanta home pros you don\'t have to second-guess',
   },
   description:
-    'A curated directory of top-rated Atlanta plumbers, electricians, HVAC techs, roofers, and house cleaners. Real businesses, verified ratings. Ranked by rating, never by who paid, and paid featured spots are always labeled.',
+    'A curated directory of top-rated Atlanta plumbers, electricians, HVAC techs, roofers, and house cleaners. Real businesses, ratings from public review platforms. Ranked by rating, never by who paid, and paid featured spots are always labeled.',
   openGraph: {
     title: 'The Atlanta List: Atlanta home pros you don\'t have to second-guess',
     description:
-      'A curated directory of top-rated Atlanta plumbers, electricians, HVAC techs, roofers, and house cleaners. Real businesses, verified ratings. Ranked by rating, never by who paid.',
+      'A curated directory of top-rated Atlanta plumbers, electricians, HVAC techs, roofers, and house cleaners. Real businesses, ratings from public review platforms. Ranked by rating, never by who paid.',
     type: 'website',
     images: ['/images/trades/plumbers.jpg'],
   },
@@ -84,7 +84,7 @@ export default async function HomePage() {
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-cream drop-shadow-[0_1px_8px_rgba(0,0,0,0.6)]">
             A curated directory of top-rated plumbers, electricians, HVAC techs, roofers,
-            and house cleaners. Real businesses, verified ratings, and rankings by
+            and house cleaners. Real businesses, ratings from public review platforms, and rankings by
             rating, never by who paid.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
@@ -132,7 +132,7 @@ export default async function HomePage() {
               </span>
               <div>
                 <p className="font-medium">Curated Atlanta list</p>
-                <p className="text-sm text-muted-foreground">Real businesses, five trades, verified ratings.</p>
+                <p className="text-sm text-muted-foreground">Real businesses, five trades, ratings from public review platforms.</p>
               </div>
             </div>
           </div>
