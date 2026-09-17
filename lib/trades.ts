@@ -207,16 +207,16 @@ export function getTrade(slug: string) {
   return trades.find((t) => t.slug === slug);
 }
 
-// Licensed fallback imagery shown when a pro has no photo (Pexels license,
-// except roofers-2 which is U.S. federal public domain). Multiple images per
-// trade; the pro's slug picks one deterministically so cards in the same
-// trade don't all show the identical photo.
+// Licensed fallback imagery shown when a pro has no photo (all Pexels license,
+// free to use, no attribution required). Three images per trade; the pro's slug
+// picks one deterministically so cards in the same trade don't all show the
+// identical photo.
 const TRADE_IMAGES: Record<string, string[]> = {
-  plumbers: ['/images/trades/plumbers.jpg', '/images/trades/plumbers-2.webp'],
-  electricians: ['/images/trades/electricians.jpg', '/images/trades/electricians-2.jpg'],
-  hvac: ['/images/trades/hvac.jpg', '/images/trades/hvac-2.jpg'],
-  roofers: ['/images/trades/roofers.jpg', '/images/trades/roofers-2.jpg'],
-  cleaners: ['/images/trades/cleaners.jpg', '/images/trades/cleaners-2.jpg'],
+  plumbers: ['/images/trades/plumbers.jpg', '/images/trades/plumbers-2.jpg', '/images/trades/plumbers-3.jpg'],
+  electricians: ['/images/trades/electricians.jpg', '/images/trades/electricians-2.jpg', '/images/trades/electricians-3.jpg'],
+  hvac: ['/images/trades/hvac.jpg', '/images/trades/hvac-2.jpg', '/images/trades/hvac-3.jpg'],
+  roofers: ['/images/trades/roofers.jpg', '/images/trades/roofers-2.jpg', '/images/trades/roofers-3.jpg'],
+  cleaners: ['/images/trades/cleaners.jpg', '/images/trades/cleaners-2.jpg', '/images/trades/cleaners-3.jpg'],
 };
 
 function hashSeed(seed: string): number {
